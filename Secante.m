@@ -1,6 +1,8 @@
-function [root, iterations] = Secante(x0, x1, n)
+function [root, iterations] = Secante(x0, x1, n, tol)
     % Método de la Secante (con gráfica de puntos)
     syms x
+    if nargin < 4, tol = 1e-6; end
+    if nargin < 3, n = 100; end 
     fprintf('Introduce la función simbólica f(x):\n');
     fprintf('Ejemplo: x^2 - 4\n');
     f_sym = input('f(x) = ', 's');
@@ -44,7 +46,7 @@ function [root, iterations] = Secante(x0, x1, n)
         
         fprintf('%d\t\t%.6f\t%.6f\t%.6f\t%.6e\n', i, x0, x1, x2, f(x2));
         
-        if abs(x1 - x2) < 1e-3
+        if abs(x1 - x2) < tol
             fprintf('Convergencia alcanzada\n');
             fprintf('Número total de iteraciones: %d\n', iterations);
             fprintf('Raíz encontrada: %.3f\n', root);
