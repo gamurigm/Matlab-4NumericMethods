@@ -1,0 +1,112 @@
+function [root, iter] = NewtonRaphson(fun, x0, tol, max_iter)
+    % NEWTON-RAPHSON: Encuentra una raíz de una función usando el método de Newton-Raphson.
+    % Inputs:
+    %   fun: función a evaluar (function handle o expresión simbólica)
+    %   x0: punto inicial
+    %   tol: tolerancia de error (opcional, default 1e-6)
+    %   max_iter: número máximo de iteraciones (opcional, default 100)
+    % Outputs:
+    %   root: raíz aproximada encontrada
+    %   iter: número de iteraciones realizadas
+
+    % Configurar valores predeterminados
+    if nargin < 3, tol = 1e-6; end
+    if nargin < 4, max_iter = 100; end
+
+    % Verificar si la función es simbólica o numérica
+    if isa(fun, 'sym')
+        % Función simbólica
+        fun_handle = matlabFunction(fun);
+        dfun_handle = matlabFunction(diff(fun)); % Derivada simbólica
+    else
+        % Función numérica
+        fun_handle = fun;
+        % Derivada numérica utilizando diferencias finitas
+        dfun_handle = @(x) (fun_handle(x + tol) - fun_handle(x)) / tol;
+    end
+
+    % Inicializar variables
+    iter = 0;
+    root = x0; % Punto inicial
+    errores = []; % Para almacenar errores
+
+    % Mostrar encabezado de tabla de iteraciones
+    fprintf('\nIteración\tx\t\tf(x)\t\tError\n');
+    fprintf('----------------------------------------------------------------------\n');
+
+    % Método de Newton-Raphson
+    while iter < max_iter
+        iter = iter + 1;
+
+        % Evaluar función y su derivada
+        f_val = fun_handle(root);
+        df_val = dfun_handle(root);
+
+        % Verificar que la derivada no sea cero
+        if abs(df_val) < 1e-6
+            error('La derivada es cero, el método no puede continuar.');
+        end
+
+        % Calcular el siguiente valor de x
+        x_next = root - f_val / df_val;
+
+        % Calcular error relativo
+        error_rel = abs((x_next - root) / x_next);
+        errores = [errores, error_rel];
+
+        % Imprimir progreso
+        fprintf('%d\t\t%.6f\t%.6f\t%.6f\n', iter, root, f_val, error_rel);
+
+        % Actualizar el valor de la raíz
+        root = x_next;
+
+        % Verificar si se cumple la tolerancia
+        if error_rel < tol
+            break;
+        end
+    end
+
+    % Comprobar convergencia
+    if iter == max_iter
+        warning('El método alcanzó el número máximo de iteraciones sin cumplir la tolerancia.');
+    end
+
+    % Mostrar resultado final
+    fprintf('----------------------------------------------------------------------\n');
+    fprintf('Raíz aproximada encontrada: %.6f\n', root);
+    fprintf('Número de iteraciones realizadas: %d\n', iter);
+
+    % Graficar la función y la convergencia
+    figure;
+
+    % Crear un rango para graficar
+    x_range = linspace(root - 5, root + 5, 600);
+    y_values = arrayfun(fun_handle, x_range);
+
+    % Graficar la función
+    plot(x_range, y_values, 'LineWidth', 1.5);
+    hold on;
+    grid on;
+
+    % Línea horizontal en y = 0
+    yline(0, '--k', 'LineWidth', 1);
+
+    % Graficar los puntos de iteración
+    plot(root, fun_handle(root), 'bo', 'MarkerSize', 10, 'MarkerFaceColor', 'g');
+
+    % Configurar leyenda y etiquetas
+    title('Método de Newton-Raphson');
+    xlabel('x');
+    ylabel('f(x)');
+    legend('Función f(x)', 'Línea cero', 'Raíz aproximada');
+    hold off;
+
+    % Graficar la convergencia
+    figure;
+    semilogy(1:length(errores), errores, '-o', 'LineWidth', 1.5, 'MarkerFaceColor', 'r');
+    grid on;
+    title('Convergencia del Método de Newton-Raphson');
+    xlabel('Iteración');
+    ylabel('Error relativo (log escala)');
+    legend('Error relativo');
+end

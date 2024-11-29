@@ -43,7 +43,7 @@ function [root, iter] = NewtonRaphson(fun, x0, tol, max_iter)
         df_val = dfun_handle(root);
 
         % Verificar que la derivada no sea cero
-        if abs(df_val) < 1e-12
+        if abs(df_val) < 1e-6
             error('La derivada es cero, el método no puede continuar.');
         end
 
@@ -80,7 +80,7 @@ function [root, iter] = NewtonRaphson(fun, x0, tol, max_iter)
     figure;
 
     % Crear un rango para graficar
-    x_range = linspace(root - 5, root + 5, 500);
+    x_range = linspace(root - 5, root + 5, 600);
     y_values = arrayfun(fun_handle, x_range);
 
     % Graficar la función
@@ -92,7 +92,7 @@ function [root, iter] = NewtonRaphson(fun, x0, tol, max_iter)
     yline(0, '--k', 'LineWidth', 1);
 
     % Graficar los puntos de iteración
-    plot(root, fun_handle(root), 'bo', 'MarkerSize', 10, 'MarkerFaceColor', 'b');
+    plot(root, fun_handle(root), 'bo', 'MarkerSize', 10, 'MarkerFaceColor', 'g');
 
     % Configurar leyenda y etiquetas
     title('Método de Newton-Raphson');
