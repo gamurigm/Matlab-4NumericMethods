@@ -1,5 +1,5 @@
 function Taylor(f, x0, n, a, b)
-    % TaylorConError: Calcula y grafica la serie de Taylor y los errores.
+    % Taylor: Calcula y grafica la serie de Taylor y los errores.
     %   f: función anónima, por ejemplo @(x) sin(x)
     %   x0: punto de expansión
     %   n: grado del polinomio de Taylor
