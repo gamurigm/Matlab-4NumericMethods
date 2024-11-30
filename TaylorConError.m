@@ -17,7 +17,6 @@ function TaylorConError(f, x0, n, a, b)
         T = T + termino;                    
     end
 
-    % Mostrar el polinomio de Taylor
     disp('Polinomio de Taylor:');
     disp(T);
 
@@ -26,12 +25,12 @@ function TaylorConError(f, x0, n, a, b)
     Serie = matlabFunction(T);                % Polinomio de Taylor
 
     % Calcular el valor de la función en el punto x0
-    f_at_x0 = f_func(x0);                     % Evaluar la función original en x0
-    taylor_at_x0 = Serie(x0);                 % Evaluar el polinomio de Taylor en x0
+    f_at_x0 = f_func(x0);                     
+    taylor_at_x0 = Serie(x0);                 
 
     % Mostrar los valores en x0
-    fprintf('Valor de la función en x0 = %f: %.4f\n', x0, f_at_x0);
-    fprintf('Valor del polinomio de Taylor en x0 = %f: %.4f\n', x0, taylor_at_x0);
+    fprintf('Valor de la función en x0 = %f: %.8f\n', x0, f_at_x0);
+    fprintf('Valor del polinomio de Taylor en x0 = %f: %.8f\n', x0, taylor_at_x0);
 
     % Generar puntos para graficar
     x_vals = linspace(a, b, 100000);
@@ -60,8 +59,7 @@ function TaylorConError(f, x0, n, a, b)
     title(['Aproximación de Taylor en x_0 = ', num2str(x0)]);
     grid on;
     hold off;
-
-    % Mostrar en consola información adicional
+    
     fprintf('Error absoluto máximo en [%f, %f]: %f\n', a, b, min(e_abs_vals));
-    fprintf('Error relativo máximo en [%f, %f]: %.4f%%\n', a, b, min(e_rel_vals));
+    fprintf('Error relativo máximo en [%f, %f]: %.8f%%\n', a, b, min(e_rel_vals));
 end
