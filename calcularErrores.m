@@ -10,7 +10,7 @@ function [e_abs, e_rel] = calcularErrores(x, x_star)
 
     % Error relativo
     if abs(x_star) > 1e-12  % Prevenir división por números cercanos a cero
-        e_rel = (e_abs / abs(x_star)) * 100;
+        e_rel = (e_abs ./ abs(x_star)) * 100;
     else
         e_rel = NaN;  
         warning('El valor exacto es muy pequeño o cero, el error relativo no es confiable.');

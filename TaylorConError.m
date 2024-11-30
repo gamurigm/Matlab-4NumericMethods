@@ -4,7 +4,7 @@ function TaylorConError(f, x0, n, a, b)
     %   x0: punto de expansión
     %   n: grado del polinomio de Taylor
     %   a, b: intervalo para graficar [a, b]
-
+    close all
     syms x;
 
     % Inicializar el polinomio de Taylor
@@ -39,11 +39,9 @@ function TaylorConError(f, x0, n, a, b)
     taylor_vals = Serie(x_vals);              % Evaluar el polinomio de Taylor
 
     % Calcular errores absoluto y relativo
-    e_abs_vals = zeros(size(x_vals));
-    e_rel_vals = zeros(size(x_vals));
-    for i = 1:length(x_vals)
-        [e_abs_vals(i), e_rel_vals(i)] = calcularErrores(taylor_vals(i), f_vals(i));
-    end
+
+    [e_abs_vals, e_rel_vals] = calcularErrores(taylor_vals, f_vals);
+    
 
     % Graficar la función original, la serie de Taylor y el error absoluto
     figure;
@@ -64,6 +62,6 @@ function TaylorConError(f, x0, n, a, b)
     hold off;
 
     % Mostrar en consola información adicional
-    fprintf('Error absoluto máximo en [%f, %f]: %f\n', a, b, max(e_abs_vals));
-    fprintf('Error relativo máximo en [%f, %f]: %.4f%%\n', a, b, max(e_rel_vals));
+    fprintf('Error absoluto máximo en [%f, %f]: %f\n', a, b, min(e_abs_vals));
+    fprintf('Error relativo máximo en [%f, %f]: %.4f%%\n', a, b, min(e_rel_vals));
 end
