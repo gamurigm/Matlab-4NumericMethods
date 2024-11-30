@@ -7,28 +7,30 @@ function Taylor(f, x0, n, a, b)
     close all
     syms x;
      
-    if nargin < 5 
-        % 1. Solicitar la función
-    f_input = input('Ingrese la función f(x) (ejemplo: @(x) sin(x)): ', 's');
-    f = str2func(f_input); % Convertir la entrada en una función anónima
-    
-    % 2. Solicitar el valor de x0 (punto de expansión)
-    x0 = input('Ingrese el valor de x0 (punto de expansión): ');
-    
-    % 3. Solicitar el número de términos de la serie
-    n = input('Ingrese el número de términos de la serie de Taylor (n): ');
-    
-    % 4. Solicitar el intervalo para graficar
-    disp('Defina el intervalo para graficar [a, b]:');
-    a = input('Ingrese el valor de a: ');
-    b = input('Ingrese el valor de b: ');
-    
-    % 5. Solicitar un valor de x para evaluar
-    x_eval = input('Ingrese un valor de x para evaluar la función y la serie de Taylor: ');
-    end
-    T = 0;
+     if nargin < 5
+        % Si no se pasan todos los argumentos:
+        if nargin < 1
+            f_input = input('Ingrese la función f(x) (ejemplo: @(x) sin(x)): ', 's');
+            f = str2func(f_input); % Convertir en una función anónima
+        end
+        
+        if nargin < 2
+            x0 = input('Ingrese el valor de x0 (punto de expansión): ');
+        end
+        
+        if nargin < 3
+            n = input('Ingrese el número de términos de la serie de Taylor (n): ');
+        end
+
+        if nargin < 4
+            disp('Defina el intervalo para graficar [a, b]:');
+            a = input('Ingrese el valor de a: ');
+            b = input('Ingrese el valor de b: ');
+        end
+     end
 
     % Calcular cada término de la serie de Taylor
+    T = 0;
     for k = 0:n
         derivada = diff(f(x), x, k);           % k-ésima derivada de f(x)
         termino = subs(derivada, x, x0) * (x - x0)^k / factorial(k); % Término de Taylor
