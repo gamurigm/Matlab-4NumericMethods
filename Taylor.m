@@ -1,9 +1,10 @@
-function TaylorConError(f, x0, n, a, b)
-    % TaylorConError: Calcula y grafica la serie de Taylor y el error absoluto/relativo.
+function Taylor(f, x0, n, a, b)
+    % TaylorConError: Calcula y grafica la serie de Taylor y los errores.
     %   f: función anónima, por ejemplo @(x) sin(x)
     %   x0: punto de expansión
     %   n: grado del polinomio de Taylor
     %   a, b: intervalo para graficar [a, b]
+    close all
     syms x;
 
     % Inicializar el polinomio de Taylor
@@ -13,36 +14,47 @@ function TaylorConError(f, x0, n, a, b)
     for k = 0:n
         derivada = diff(f(x), x, k);           % k-ésima derivada de f(x)
         termino = subs(derivada, x, x0) * (x - x0)^k / factorial(k); % Término de Taylor
-        T = T + termino;                      % Sumar el término al polinomio
+        T = T + termino;                    
     end
 
     disp('Polinomio de Taylor:');
     disp(T);
 
     % Convertir funciones simbólicas a evaluables
-    f_func = f;                               
-    taylor_func = matlabFunction(T);  
+    f_func = f;                               % Función original (anónima)
+    Serie = matlabFunction(T);                % Polinomio de Taylor
 
-    % Generar puntos para graficar
+    % Calcular el valor de la función en el punto x0
+    f_at_x0 = f_func(x0);                     
+    taylor_at_x0 = Serie(x0);   
+
+     % Generar puntos para graficar
     x_vals = linspace(a, b, 1000);
     f_vals = arrayfun(f_func, x_vals);        % Evaluar la función original
-    taylor_vals = taylor_func(x_vals);        % Evaluar el polinomio de Taylor
+    taylor_vals = Serie(x_vals);              % Evaluar el polinomio de Taylor
 
-    % Calcular el error absoluto
-    error_vals = abs(f_vals - taylor_vals);
+    % Mostrar los valores en x0
+    fprintf('Valor de la función en x0 = %f: %.8f\n', x0, f_at_x0);
+    fprintf('Valor del polinomio de Taylor en x0 = %f: %.8f\n', x0, taylor_at_x0);
 
-    % Calcular errores en un punto clave (ej. el centro del intervalo)
-    punto = x0; % Puedes cambiarlo a otro valor si deseas
-    valor_real = double(f_func(punto));
-    valor_taylor = double(taylor_func(punto));
-    [e_abs, e_rel] = calcularErrores(valor_taylor, valor_real);
+   
+
+    % Calcular errores absoluto y relativo
+
+    [e_abs_vals, e_rel_vals] = calcularErrores(taylor_vals, f_at_x0);
+    
 
     % Graficar la función original, la serie de Taylor y el error absoluto
     figure;
     hold on;
     plot(x_vals, f_vals, 'b-', 'LineWidth', 2, 'DisplayName', 'Función Original');
     plot(x_vals, taylor_vals, 'r--', 'LineWidth', 2, 'DisplayName', ['Taylor (grado ', num2str(n), ')']);
-    plot(x_vals, error_vals, 'k-.', 'LineWidth', 1.5, 'DisplayName', 'Error Absoluto');
+    plot(x_vals, e_abs_vals, 'k-.', 'LineWidth', 1.5, 'DisplayName', 'Error Absoluto');
+
+    % Añadir los puntos evaluados en x0
+    plot(x0, f_at_x0, 'bo', 'MarkerFaceColor', 'b', 'DisplayName', ['f(x0) = ' num2str(f_at_x0)]);
+    plot(x0, taylor_at_x0, 'ro', 'MarkerFaceColor', 'r', 'DisplayName', ['T(x0) = ' num2str(taylor_at_x0)]);
+
     xlabel('x');
     ylabel('y');
     legend('Location', 'Best');
@@ -50,7 +62,6 @@ function TaylorConError(f, x0, n, a, b)
     grid on;
     hold off;
 
-    % Mostrar en consola información adicional
-    fprintf('Valor real en x_0 = %.2f: %.8f\n', punto, valor_real);
-    fprintf('Valor de Taylor en x_0 = %.2f: %.8f\n', punto, valor_taylor);
+    fprintf('Error absoluto [%f, %f]: %f\n', a, b, min(e_abs_vals));
+    fprintf('Error relativo [%f, %f]: %.8f%%\n', a, b, min(e_rel_vals));
 end
