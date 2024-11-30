@@ -7,7 +7,6 @@ function Taylor(f, x0, n, a, b)
     close all
     syms x;
 
-    % Inicializar el polinomio de Taylor
     T = 0;
 
     % Calcular cada término de la serie de Taylor
@@ -21,8 +20,8 @@ function Taylor(f, x0, n, a, b)
     disp(T);
 
     % Convertir funciones simbólicas a evaluables
-    f_func = f;                               % Función original (anónima)
-    Serie = matlabFunction(T);                % Polinomio de Taylor
+    f_func = f;                              
+    Serie = matlabFunction(T);             
 
     % Calcular el valor de la función en el punto x0
     f_at_x0 = f_func(x0);                     
@@ -30,6 +29,7 @@ function Taylor(f, x0, n, a, b)
 
      % Generar puntos para graficar
     x_vals = linspace(a, b, 1000);
+    
     f_vals = arrayfun(f_func, x_vals);        % Evaluar la función original
     taylor_vals = Serie(x_vals);              % Evaluar el polinomio de Taylor
 
@@ -37,13 +37,8 @@ function Taylor(f, x0, n, a, b)
     fprintf('Valor de la función en x0 = %f: %.8f\n', x0, f_at_x0);
     fprintf('Valor del polinomio de Taylor en x0 = %f: %.8f\n', x0, taylor_at_x0);
 
-   
-
-    % Calcular errores absoluto y relativo
-
     [e_abs_vals, e_rel_vals] = calcularErrores(taylor_vals, f_at_x0);
     
-
     % Graficar la función original, la serie de Taylor y el error absoluto
     figure;
     hold on;
