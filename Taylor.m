@@ -49,14 +49,14 @@ function Taylor(f, x0, n, a, b)
     taylor_at_x0 = Serie(x0);   
 
      % Generar puntos para graficar
-    x_vals = linspace(a, b, 1000);
+    x_vals = linspace(a, b, 10000);
     
     f_vals = arrayfun(f_func, x_vals);        % Evaluar la función original
     taylor_vals = Serie(x_vals);              % Evaluar el polinomio de Taylor
 
     % Mostrar los valores en x0
-    fprintf('Valor de la función en x0 = %f: %.8f\n', x0, f_at_x0);
-    fprintf('Valor del polinomio de Taylor en x0 = %f: %.8f\n', x0, taylor_at_x0);
+    fprintf('Valor de la función en x0 = %f: %.24f\n', x0, f_at_x0);
+    fprintf('Valor del P. Taylor en x0 = %f: %.24f\n', x0, taylor_at_x0);
 
     [e_abs_vals, e_rel_vals] = calcularErrores(taylor_vals, f_at_x0);
     
@@ -65,11 +65,11 @@ function Taylor(f, x0, n, a, b)
     hold on;
     plot(x_vals, f_vals, 'b-', 'LineWidth', 2, 'DisplayName', 'Función Original');
     plot(x_vals, taylor_vals, 'r--', 'LineWidth', 2, 'DisplayName', ['Taylor (grado ', num2str(n), ')']);
-    plot(x_vals, e_abs_vals, 'k-.', 'LineWidth', 1.5, 'DisplayName', 'Error Absoluto');
+    plot(x_vals, e_abs_vals, 'k-.', 'LineWidth', 1, 'DisplayName', 'Error Absoluto');
 
     % Añadir los puntos evaluados en x0
-    plot(x0, f_at_x0, 'bo', 'MarkerFaceColor', 'b', 'DisplayName', ['f(x0) = ' num2str(f_at_x0)]);
-    plot(x0, taylor_at_x0, 'ro', 'MarkerFaceColor', 'r', 'DisplayName', ['T(x0) = ' num2str(taylor_at_x0)]);
+    plot(x0, f_at_x0, 'ko', 'MarkerFaceColor', 'g', 'DisplayName', ['f(x0) = ' num2str(f_at_x0)]);
+   % plot(x0, taylor_at_x0, 'go', 'MarkerFaceColor', 'k', 'DisplayName', ['T(x0) = ' num2str(taylor_at_x0)]);
 
     xlabel('x');
     ylabel('y');
@@ -78,6 +78,6 @@ function Taylor(f, x0, n, a, b)
     grid on;
     hold off;
 
-    fprintf('Error absoluto [%f, %f]: %f\n', a, b, min(e_abs_vals));
-    fprintf('Error relativo [%f, %f]: %.8f%%\n', a, b, min(e_rel_vals));
+    fprintf('Error absoluto [%.2f, %.2f]: %.8f\n', a, b, min(e_abs_vals));
+    fprintf('Error relativo [%.2f, %.2f]: %.8f%%\n', a, b, min(e_rel_vals));
 end
