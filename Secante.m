@@ -1,6 +1,7 @@
 function [root, iterations] = Secante(x0, x1, n, tol)
     % Método de la Secante (con gráfica de puntos)
-    syms x
+    close all
+    syms x;
     if nargin < 4, tol = 1e-6; end
     if nargin < 3, n = 100; end 
     fprintf('Introduce la función simbólica f(x):\n');

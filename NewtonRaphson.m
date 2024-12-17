@@ -8,8 +8,8 @@ function [root, iter] = NewtonRaphson(fun, x0, tol, max_iter)
     % Outputs:
     %   root: raíz aproximada encontrada
     %   iter: número de iteraciones realizadas
-
-    % Configurar valores predeterminados
+    close all
+    syms x;
     if nargin < 3, tol = 1e-6; end
     if nargin < 4, max_iter = 100; end
 
@@ -43,7 +43,7 @@ function [root, iter] = NewtonRaphson(fun, x0, tol, max_iter)
         df_val = dfun_handle(root);
 
         % Verificar que la derivada no sea cero
-        if abs(df_val) < 1e-6
+        if abs(df_val) < 1e-12
             error('La derivada es cero, el método no puede continuar.');
         end
 
