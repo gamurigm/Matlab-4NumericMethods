@@ -1,4 +1,4 @@
-function Gauss(A, B)
+function GaussJordan(A, B)
     % Entrada de datos
     A = input("Ingresa una Matriz Cuadrada entre Corchetes A: ");
     B = input("Ingresa el vector fila B entre Corchetes B: ");
@@ -31,36 +31,34 @@ function Gauss(A, B)
     fprintf("Matriz aumentada inicial:\n");
     disp(A_aumentada);
 
-    % Eliminación Gaussiana
-    for j = 1:n-1
-        for i = j+1:n
-            factor = A_aumentada(i, j) / A_aumentada(j, j);
-            A_aumentada(i, :) = A_aumentada(i, :) - factor * A_aumentada(j, :);
-            fprintf("Matriz después de hacer 0 en posición (%d, %d):\n", i, j);
-            disp(A_aumentada);
+    % Eliminación Gauss-Jordan
+    for j = 1:n
+        % Hacer que el elemento A_aumentada(j,j) sea 1
+        A_aumentada(j, :) = A_aumentada(j, :) / A_aumentada(j, j);
+        
+        % Hacer ceros en la columna j
+        for i = 1:n
+            if i ~= j
+                A_aumentada(i, :) = A_aumentada(i, :) - A_aumentada(i, j) * A_aumentada(j, :);
+            end
         end
+        
+        fprintf("Matriz después de hacer 1 en posición (%d, %d) y ceros en la columna %d:\n", j, j, j);
+        disp(A_aumentada);
     end
 
-    % Sustitución regresiva
-    x = zeros(n, 1); 
-    x(n) = A_aumentada(n, end) / A_aumentada(n, n); 
-    for i = n-1:-1:1
-        suma = A_aumentada(i, end);
-        for j = i+1:n
-            suma = suma - A_aumentada(i, j) * x(j);
-        end
-        x(i) = suma / A_aumentada(i, i);
-    end
-
+    % La solución está en la última columna de la matriz aumentada
+    x = A_aumentada(:, end);
+    
     % Mostrar la solución
     disp("La solución del sistema de ecuaciones lineales es:");
-    disp(x);
+    disp(round(x,3));
 
     % Verificación AX = B
     disp("Verificación de AX = B:");
     B_verificado = A * x; % Usar la matriz original A
     disp("B obtenido:");
-    disp(B_verificado);
+    disp(round(B_verificado,3));
     disp("B original:");
     disp(B');
 
