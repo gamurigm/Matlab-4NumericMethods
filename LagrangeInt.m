@@ -1,8 +1,9 @@
 function [p] = LagrangeInt(X, f)
 
-if nargin
+if nargin <2
 X = input("Ingrese X en forma matricial: ")
 f = input("Ingrese f de forma matricial: ")
+end
 
 clc;
 syms x;

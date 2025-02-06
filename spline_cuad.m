@@ -1,0 +1,1 @@
+function spline_cuad(X,Y)
