@@ -1,47 +1,69 @@
-
 %MINIMOS CUADRADOS FUNCIONES CUADRATICAS
+% Entrada de datos
+x = input('Ingrese el vector de Xs entre corchetes [ ]: '); %x = [1 3 4 6 8 9 11 14];
+y = input('Ingrese el vector de Ys entre corchetes [ ]: '); %y = [1 2 4 4 5 7 8 9];
 
-x = input('Ingrese el vector de Xs entre corchetes [ ]: ');
-y = input('Ingrese el vector de Ys entre corchetes [ ]: ');
-
-% Datos experimentales
-%x = [1 3 4 6 8 9 11 14];
-%y = [1 2 4 4 5 7 8 9];
-
-% Matriz X para el ajuste cuadrático (incluye x^2, x y 1)
+% Construcción de la matriz de diseño
 X = [x'.^2, x', ones(length(x), 1)];
-
-% Vector de valores y
 y = y';
 
-% Calcular los coeficientes utilizando mínimos cuadrados
+% Resolución del sistema por mínimos cuadrados
 theta = X\y;
-
-% Los coeficientes a, b y c
 a = theta(1);
 b = theta(2);
 c = theta(3);
 
-fprintf('La ecuación de la parábola ajustada es: y = %.4fx^2 + %.4fx + %.4f\n', a, b, c);
+% Mostrar la ecuación ajustada
+fprintf('\nLa ecuación de la parábola ajustada es:\ny = %.4fx^2 + %.4fx + %.4f\n', a, b, c);
 
-% Graficar los datos y la parábola ajustada
-figure;
-scatter(x, y, 'ro'); % Puntos experimentales
+% Cálculo de valores predichos y residuos para todo el conjunto
+y_pred = X * theta;  % Calcula todos los valores predichos de una vez
+residuos = y - y_pred;
+
+% Cálculo de estadísticas una sola vez
+% Error cuadrático total (SSE)
+S = residuos' * residuos;  % Suma de cuadrados de residuos
+
+% Suma total de cuadrados (ST)
+y_mean = mean(y);
+ST = sum((y - y_mean).^2);
+
+% Coeficiente de determinación R^2
+R2 = 1 - (S / ST);
+
+% Error estándar de la estimación
+% Grados de libertad = n - 3 (porque estimamos 3 parámetros: a, b, c)
+Se = sqrt(S / (length(x) - 3));
+
+% Mostrar estadísticas una sola vez
+fprintf('\nEstadísticas del ajuste:\n');
+fprintf('Error cuadrático total (SSE) = %.4f\n', S);
+fprintf('Coeficiente de determinación (R^2) = %.4f\n', R2);
+fprintf('Error estándar de la estimación (Se) = %.4f\n', Se);
+
+% Graficar resultados
+figure('Position', [100, 100, 800, 500]);
+% Datos experimentales
+scatter(x, y, 'ro', 'filled', 'DisplayName', 'Datos experimentales');
 hold on;
-x_fit = linspace(min(x), max(x), 100); % Puntos para graficar la parábola
-y_fit = a*x_fit.^2 + b*x_fit + c; % Ecuación de la parábola ajustada
-plot(x_fit, y_fit, 'b-', 'LineWidth', 2); % Parábola ajustada
+% Curva ajustada
+x_fit = linspace(min(x), max(x), 100);
+y_fit = a*x_fit.^2 + b*x_fit + c;
+plot(x_fit, y_fit, 'b-', 'LineWidth', 2, 'DisplayName', 'Parábola ajustada');
 
-% Etiquetas y título
+% Configuración del gráfico
 xlabel('x');
 ylabel('y');
-title('Ajuste Cuadrático de Mínimos Cuadrados');
-legend('Datos experimentales', 'Parábola ajustada', 'Location', 'Best');
+title('Ajuste Cuadrático por Mínimos Cuadrados');
+legend('Location', 'Best');
 grid on;
 hold off;
 
-% Cálculo del error cuadrático total
-y_pred = a*x.^2 + b*x + c; % Valores predichos por la parábola ajustada
-error = sum((y - y_pred).^2); % Error cuadrático total
-
-fprintf('El error cuadrático total es: %.4f\n', error);
+% Imprimir tabla de valores y residuos
+fprintf('\nTabla de valores y residuos:\n');
+fprintf('    x    |    y    | Predicho | Residuo\n');
+fprintf('---------|---------|----------|--------\n');
+for i = 1:length(x)
+    fprintf('%8.4f | %7.4f | %8.4f | %8.4f\n', ...
+        x(i), y(i), y_pred(i), residuos(i));
+end
