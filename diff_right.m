@@ -21,7 +21,7 @@
 clc; clear; close all;
 
 func_str = input('Introduce la función en términos de x (por ejemplo, x^3): ', 's');
-f = str2func(['@(x) ', func_str]); % Convertir la cadena a una función
+f = str2func(['@(x) ', func_str]);
 x0 = input('Introduce el valor de x0: ');
 n = input('Introduce el orden de la derivada deseada: ');
 h_value = input('Introduce el valor de h: ');
