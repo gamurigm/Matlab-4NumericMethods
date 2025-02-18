@@ -11,7 +11,6 @@ syms x;
 n = length(X);
 p = 0;
 
-
 plot(X, f, 'b*')
 hold on 
 
@@ -30,14 +29,12 @@ p = expand(p)
 pretty(p)
 hold on 
 
-fplot(p, [min(X), max(X)], 'r-')
-
+fplot(p, [min(X), max(X)], 'k')
 
 x = input("ingresa el valor de x (dentro de la mat X) a interpolar la función x= ")
 p_int = eval(p)
 hold on 
 plot(x, p_int, 'o', 'MarkerEdgeColor', 'k', 'MarkerFaceColor', 'g')
-
 
 end
 
