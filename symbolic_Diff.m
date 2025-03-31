@@ -6,7 +6,7 @@ f_str = input('Ingrese la función en términos de x (por ejemplo, sqrt(x)): ', 
 f = str2sym(f_str);  % Convertir la cadena a una expresión simbólica
 
 % Pedir el valor del punto de evaluación, el orden de la derivada y el tipo de derivada
-x0 = input('Ingrese el valor de x0: ');
+%0 = input('Ingrese el valor de x0: ');
 n = input('Ingrese el orden de la derivada deseada: ');
 tipo_derivada = input('Ingrese el tipo de derivada (1: Progresiva, 2: Regresiva, 3: Central): ');
 
@@ -33,7 +33,7 @@ for k = 2:n
         df = (subs(df, x, x + h) - df) / h;
     elseif tipo_derivada == 2
         % Derivada regresiva
-        df = (subs(df, x, x) - subs(df, x, x - h)) / h;
+        df = (df - subs(df, x, x)) / h;
     elseif tipo_derivada == 3
         % Derivada central
         df = (subs(df, x, x + h) - subs(df, x, x - h)) / (2 * h);

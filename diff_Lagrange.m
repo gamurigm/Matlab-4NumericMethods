@@ -9,32 +9,29 @@ function Dn = diff_Lagrange()
         error('Los vectores X y f deben tener la misma longitud.');
     end
 
-    syms x; 
-    Dn = 0;
+    syms x;
     
-    % Calcular la derivada n de Pn(x)
-    for i = 1:n
-        
-        P_i = LagrangeInt(X, f);
-        dP_i = diff(P_i, x);
-        
-        % Sumar la derivada a la derivada total
-        Dn = Dn + dP_i * f(i); % Multiplicar por los valores de f
-      
-    end
-     
+    % Obtener el polinomio de interpolación de Lagrange
+    L = LagrangeInt(X, f);
+    
+    % Calcular la derivada de orden n
+    Dn = diff(L, x, n);
+    
+    % Evaluar la derivada en x0
     Dn_val = double(subs(Dn, x, x0));
+    
+    % Mostrar el resultado
     disp(['Derivada de orden ', num2str(n), ' en x = ', num2str(x0), ' es: ', num2str(Dn_val)]);
-    grid on 
-    fplot(Dn, [min(X), max(X)], '-m');
     
+    % Graficar
+    fplot(Dn, [min(X) max(X)], 'm-', 'LineWidth', 1);
     hold on;
+   
+    plot(x0, Dn_val, 'ro', 'MarkerFaceColor', 'b'); % Punto evaluado
     
-    % Graficar el punto evaluado en la derivada
-    plot(x0, Dn_val, 'ko', 'MarkerFaceColor', 'b', 'MarkerSize', 6); 
-    title(['Derivada de orden ', num2str(n)]);
-    xlabel('x');
-    ylabel('f''(x)');
-
-    legend('Pts. Interp', 'Polinomio', 'Pts. Eval','Location','best');   
+    grid on;
+    legend('Puntos de Interpolación', 'Polinomio de Lagrange', 'Location', 'best');
+    title('Interpolación de Lagrange y su derivada');
+    xlabel('x'); ylabel('f(x)');
+    hold off;
 end

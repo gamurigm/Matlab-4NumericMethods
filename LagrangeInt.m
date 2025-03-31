@@ -29,7 +29,7 @@ p = expand(p)
 pretty(p)
 hold on 
 
-fplot(p, [min(X), max(X)], 'k')
+fplot(p, [min(X), max(X)], 'k', LineWidth=1.1)
 
 x = input("ingresa el valor de x (dentro de la mat X) a interpolar la función x= ")
 p_int = eval(p)

@@ -15,7 +15,7 @@ all_df = sym(zeros(1,n));  % Guardar las derivadas
 all_df  (1) = simplify(df);
 
 for k = 2:n
-    df = (subs(df, x, x + h) - subs(df,x, x - h)) / h; 
+    df = (subs(df, x, x + h) - subs(df,x, x - h)) / (2*h); 
     all_df(k) = simplify(df); 
     disp(['Derivada de orden ', num2str(k), ': ', char(simplify(df))]); 
 end
